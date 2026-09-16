@@ -76,6 +76,49 @@ pub fn calculate_yield_share(total_payout_amount: u64, share_bps: u16) -> Result
     u64::try_from(share).map_err(|_| error!(StripVaultError::MathOverflow))
 }
 
+/// Default deterministic simulated oracle exchange rates:
+/// 1.00 stock share = 150.00 USDC (6 decimals: 150_000_000)
+pub const DEFAULT_USDC_SWAP_RATE: u64 = 150_000_000;
+/// 1.00 stock share = 1.20 SOL (9 decimals: 1_200_000_000 lamports)
+pub const DEFAULT_SOL_SWAP_RATE: u64 = 1_200_000_000;
+
+/// Calculates the swap output for a given raw stock amount based on oracle rate.
+pub fn calculate_simulated_swap_output(
+    stock_amount: u64,
+    stock_decimals: u8,
+    payout_asset_type: crate::state::PayoutAssetType,
+    custom_rate: Option<u64>,
+) -> Result<u64> {
+    if stock_amount == 0 {
+        return Ok(0);
+    }
+
+    let rate = match custom_rate {
+        Some(r) => {
+            require!(r > 0, StripVaultError::InvalidMultiplier);
+            r
+        }
+        None => match payout_asset_type {
+            crate::state::PayoutAssetType::Usdc => DEFAULT_USDC_SWAP_RATE,
+            crate::state::PayoutAssetType::Sol => DEFAULT_SOL_SWAP_RATE,
+        },
+    };
+
+    let scale_factor = 10u128
+        .checked_pow(stock_decimals as u32)
+        .ok_or(StripVaultError::MathOverflow)?;
+
+    let numerator = (stock_amount as u128)
+        .checked_mul(rate as u128)
+        .ok_or(StripVaultError::MathOverflow)?;
+
+    let output = numerator
+        .checked_div(scale_factor)
+        .ok_or(StripVaultError::MathOverflow)?;
+
+    u64::try_from(output).map_err(|_| error!(StripVaultError::MathOverflow))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -169,5 +212,29 @@ mod tests {
 
         // >100% share (10,001 bps) should revert
         assert!(calculate_yield_share(total_usdc, 10001).is_err());
+    }
+
+    #[test]
+    fn test_simulated_swap_output() {
+        use crate::state::PayoutAssetType;
+
+        // 10 mock stock shares with 6 decimals (10_000_000 raw units)
+        let ten_shares = 10_000_000u64;
+
+        // USDC swap @ default $150.00 -> 10 * 150 = 1,500 USDC (1_500_000_000 units)
+        let usdc_out = calculate_simulated_swap_output(ten_shares, 6, PayoutAssetType::Usdc, None).unwrap();
+        assert_eq!(usdc_out, 1_500_000_000);
+
+        // SOL swap @ default 1.20 SOL -> 10 * 1.2 = 12 SOL (12_000_000_000 lamports)
+        let sol_out = calculate_simulated_swap_output(ten_shares, 6, PayoutAssetType::Sol, None).unwrap();
+        assert_eq!(sol_out, 12_000_000_000);
+
+        // Custom rate test: $200.00 USDC
+        let custom_out = calculate_simulated_swap_output(ten_shares, 6, PayoutAssetType::Usdc, Some(200_000_000)).unwrap();
+        assert_eq!(custom_out, 2_000_000_000);
+
+        // Zero amount produces zero output
+        let zero_out = calculate_simulated_swap_output(0, 6, PayoutAssetType::Usdc, None).unwrap();
+        assert_eq!(zero_out, 0);
     }
 }

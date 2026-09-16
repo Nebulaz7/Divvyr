@@ -21,3 +21,6 @@ anchor-spl = { version = "0.30.1", features = ["token_2022"] }
 mpl-core = "0.7.0"
 solana-program = ">=1.18, <2.0"
 thiserror = "1.0"
+
+[lints.rust]
+unexpected_cfgs = { level = "allow" }

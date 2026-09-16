@@ -56,6 +56,27 @@ pub mod strip_vault {
         )
     }
 
+    /// Step 1: Harvests raw stock tokens from a multiplier bump without diluting principal equity value
+    pub fn keeper_harvest_dividend(ctx: Context<KeeperHarvestDividend>) -> Result<()> {
+        instructions::keeper_harvest_dividend::handler(ctx)
+    }
+
+    /// Step 2: Deterministic simulated swap of pending harvest tokens against the reserve into USDC or SOL
+    pub fn keeper_execute_swap(
+        ctx: Context<KeeperExecuteSwap>,
+        custom_rate: Option<u64>,
+    ) -> Result<()> {
+        instructions::keeper_execute_swap::handler(ctx, custom_rate)
+    }
+
+    /// Step 3: Passive expiry check, holder verification, and proportional payout distribution to active Yield NFTs & Master Deed
+    pub fn keeper_distribute_payout<'a, 'b, 'c, 'info>(
+        ctx: Context<'a, 'b, 'c, 'info, KeeperDistributePayout<'info>>,
+        total_payout_amount: u64,
+    ) -> Result<()> {
+        instructions::keeper_distribute_payout::handler(ctx, total_payout_amount)
+    }
+
     pub fn ping(_ctx: Context<Ping>) -> Result<()> {
         msg!("Divvyr strip_vault program live!");
         Ok(())

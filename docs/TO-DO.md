@@ -30,10 +30,10 @@
   - [x] Validate Master Deed ownership on-chain
   - [x] Attach Metaplex Core `PermanentBurnDelegate` plugin to Yield NFT (held by Vault PDA)
   - [x] Initialize `YieldRecord` PDA and enforce <= 100% total yield cap
-- [ ] **Part 4: The 3-Step Dividend Engine**
-  - [ ] `keeper_harvest_dividend` (effective timestamp validation and delta calculation)
-  - [ ] `keeper_execute_swap` (deterministic simulated swap engine)
-  - [ ] `keeper_distribute_payout` (passive expiry + strict recipient validation)
+- [x] **Part 4: The 3-Step Dividend Engine**
+  - [x] `keeper_harvest_dividend` (effective timestamp validation and delta calculation)
+  - [x] `keeper_execute_swap` (deterministic simulated swap engine)
+  - [x] `keeper_distribute_payout` (passive expiry + strict recipient validation)
 - [ ] **Part 5: Buyout & Principal Unwind**
   - [ ] `owner_buyout_yield` (SOL payment to holder + delegated burn of Yield NFT)
   - [ ] `owner_redeem_principal` (burn Master Deed + unlock underlying stock)

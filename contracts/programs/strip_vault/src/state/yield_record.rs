@@ -35,3 +35,69 @@ impl YieldRecord {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_expiry_condition_none() {
+        let record = YieldRecord {
+            vault: Pubkey::default(),
+            yield_asset_id: Pubkey::default(),
+            buyout_price_lamports: 1_000_000_000,
+            share_bps: 2500,
+            payouts_received_count: 50,
+            is_active: true,
+            bump: 255,
+            expiry_condition: ExpiryCondition::None,
+            _reserved: [0u8; 32],
+        };
+        assert!(!record.is_expired(i64::MAX));
+    }
+
+    #[test]
+    fn test_expiry_condition_timestamp() {
+        let record = YieldRecord {
+            vault: Pubkey::default(),
+            yield_asset_id: Pubkey::default(),
+            buyout_price_lamports: 1_000_000_000,
+            share_bps: 2500,
+            payouts_received_count: 0,
+            is_active: true,
+            bump: 255,
+            expiry_condition: ExpiryCondition::Timestamp(1_700_000_000),
+            _reserved: [0u8; 32],
+        };
+
+        // Before expiry timestamp: active
+        assert!(!record.is_expired(1_699_999_999));
+        // Exactly at expiry timestamp: expired
+        assert!(record.is_expired(1_700_000_000));
+        // After expiry timestamp: expired
+        assert!(record.is_expired(1_700_000_001));
+    }
+
+    #[test]
+    fn test_expiry_condition_payout_count() {
+        let mut record = YieldRecord {
+            vault: Pubkey::default(),
+            yield_asset_id: Pubkey::default(),
+            buyout_price_lamports: 1_000_000_000,
+            share_bps: 2500,
+            payouts_received_count: 0,
+            is_active: true,
+            bump: 255,
+            expiry_condition: ExpiryCondition::PayoutCount(4), // 4 quarterly dividends
+            _reserved: [0u8; 32],
+        };
+
+        assert!(!record.is_expired(1000));
+        record.payouts_received_count = 3;
+        assert!(!record.is_expired(1000));
+        record.payouts_received_count = 4;
+        assert!(record.is_expired(1000));
+        record.payouts_received_count = 5;
+        assert!(record.is_expired(1000));
+    }
+}

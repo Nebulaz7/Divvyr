@@ -37,4 +37,13 @@ pub enum StripVaultError {
 
     #[msg("Multiplier is zero or invalid")]
     InvalidMultiplier,
+
+    #[msg("Invalid remaining accounts format for yield distribution")]
+    InvalidRemainingAccounts,
+
+    #[msg("Yield record does not belong to this vault or asset")]
+    InvalidYieldRecord,
+
+    #[msg("Insufficient payout balance in vault")]
+    InsufficientPayoutBalance,
 }

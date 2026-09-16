@@ -42,3 +42,10 @@ pub struct YieldBoughtOutEvent {
     pub buyout_price_lamports: u64,
     pub share_bps_reclaimed: u16,
 }
+
+#[event]
+pub struct SwapExecutedEvent {
+    pub vault: Pubkey,
+    pub stock_amount_in: u64,
+    pub payout_amount_out: u64,
+}
