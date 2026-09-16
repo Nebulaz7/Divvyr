@@ -1,0 +1,23 @@
+[package]
+name = "strip_vault"
+version = "0.1.0"
+description = "Divvyr: Yield-stripping vault for Token-2022 equities on Solana"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "strip_vault"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { version = "0.30.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.30.1", features = ["token_2022"] }
+mpl-core = "0.7.0"
+solana-program = ">=1.18, <2.0"
+thiserror = "1.0"

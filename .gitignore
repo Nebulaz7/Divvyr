@@ -1,0 +1,32 @@
+# Rust & Anchor Build Artifacts
+target/
+**/target/
+**/*.rs.bk
+.anchor/
+test-ledger/
+
+# Node, Next.js & Dependencies
+node_modules/
+**/node_modules/
+.next/
+dist/
+build/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment Variables & Keys
+.env
+.env*.local
+*.key
+*.pem
+*.secret
+id.json
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
