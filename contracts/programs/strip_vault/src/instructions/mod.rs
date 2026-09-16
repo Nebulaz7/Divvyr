@@ -1,1 +1,3 @@
-// Instruction contexts will be added in Parts 2-5
+pub mod creator_initialize_vault;
+
+pub use creator_initialize_vault::*;
