@@ -25,11 +25,11 @@
   - [x] Token-2022 Scaled UI Amount on-chain TLV unpacker
   - [x] Dynamic `name` and `uri` arguments (no hardcoded URLs)
   - [x] `creator_initialize_vault` with Token-2022 transfer and Metaplex Core CPI
-- [ ] **Part 3: Position Stripping & Yield NFT with Burn Delegate**
-  - [ ] Implement `owner_strip_position`
-  - [ ] Validate Master Deed ownership on-chain
-  - [ ] Attach Metaplex Core `BurnDelegate` plugin to Yield NFT (held by Vault PDA)
-  - [ ] Initialize `YieldRecord` PDA and enforce $\le 100\%$ total yield cap
+- [x] **Part 3: Position Stripping & Yield NFT with Burn Delegate**
+  - [x] Implement `owner_strip_position`
+  - [x] Validate Master Deed ownership on-chain
+  - [x] Attach Metaplex Core `PermanentBurnDelegate` plugin to Yield NFT (held by Vault PDA)
+  - [x] Initialize `YieldRecord` PDA and enforce <= 100% total yield cap
 - [ ] **Part 4: The 3-Step Dividend Engine**
   - [ ] `keeper_harvest_dividend` (effective timestamp validation and delta calculation)
   - [ ] `keeper_execute_swap` (deterministic simulated swap engine)

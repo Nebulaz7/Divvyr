@@ -37,6 +37,25 @@ pub mod strip_vault {
         )
     }
 
+    /// Carves out a percentage of future dividend rights and mints a bearer Yield NFT to the recipient with BurnDelegate attached
+    pub fn owner_strip_position(
+        ctx: Context<OwnerStripPosition>,
+        share_bps: u16,
+        expiry_condition: ExpiryCondition,
+        buyout_price_lamports: u64,
+        name: String,
+        uri: String,
+    ) -> Result<()> {
+        instructions::owner_strip_position::handler(
+            ctx,
+            share_bps,
+            expiry_condition,
+            buyout_price_lamports,
+            name,
+            uri,
+        )
+    }
+
     pub fn ping(_ctx: Context<Ping>) -> Result<()> {
         msg!("Divvyr strip_vault program live!");
         Ok(())
