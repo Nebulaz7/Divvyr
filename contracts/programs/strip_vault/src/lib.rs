@@ -77,6 +77,16 @@ pub mod strip_vault {
         instructions::keeper_distribute_payout::handler(ctx, total_payout_amount)
     }
 
+    /// Allows the Master Deed owner to pay the pre-set SOL buyout price to the Yield NFT holder and burn the Yield NFT via delegated authority
+    pub fn owner_buyout_yield(ctx: Context<OwnerBuyoutYield>) -> Result<()> {
+        instructions::owner_buyout_yield::handler(ctx)
+    }
+
+    /// Allows the Master Deed owner to burn the Master Deed NFT, reclaim all underlying stock equity, and close the vault
+    pub fn owner_redeem_principal(ctx: Context<OwnerRedeemPrincipal>) -> Result<()> {
+        instructions::owner_redeem_principal::handler(ctx)
+    }
+
     pub fn ping(_ctx: Context<Ping>) -> Result<()> {
         msg!("Divvyr strip_vault program live!");
         Ok(())

@@ -34,9 +34,9 @@
   - [x] `keeper_harvest_dividend` (effective timestamp validation and delta calculation)
   - [x] `keeper_execute_swap` (deterministic simulated swap engine)
   - [x] `keeper_distribute_payout` (passive expiry + strict recipient validation)
-- [ ] **Part 5: Buyout & Principal Unwind**
-  - [ ] `owner_buyout_yield` (SOL payment to holder + delegated burn of Yield NFT)
-  - [ ] `owner_redeem_principal` (burn Master Deed + unlock underlying stock)
+- [x] **Part 5: Buyout & Principal Unwind**
+  - [x] `owner_buyout_yield` (SOL payment to holder + delegated burn of Yield NFT)
+  - [x] `owner_redeem_principal` (burn Master Deed + unlock underlying stock)
 
 ---
 

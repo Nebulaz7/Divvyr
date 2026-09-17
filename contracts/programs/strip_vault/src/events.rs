@@ -49,3 +49,11 @@ pub struct SwapExecutedEvent {
     pub stock_amount_in: u64,
     pub payout_amount_out: u64,
 }
+
+#[event]
+pub struct PrincipalRedeemedEvent {
+    pub vault: Pubkey,
+    pub owner: Pubkey,
+    pub stock_mint: Pubkey,
+    pub stock_shares_returned: u64,
+}
